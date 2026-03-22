@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from app.services.tts_service import generate_speech, get_speakers
-from app.config import AUDIO_OUTPUT_DIR, MAX_TEXT_LENGTH
+from app.services.tts_service import generate_speech, get_speakers, get_all_languages, get_multilingual_speakers
+from app.config import AUDIO_OUTPUT_DIR
 from app.database import get_db
 from app.utils.auth import get_current_user
 from app.models.user import User
@@ -14,13 +14,21 @@ router = APIRouter()
 
 class TTSRequest(BaseModel):
     text: str
-    speaker: str = "p267"
+    speaker: str = "p225"
     speed: float = 1.0
+    language: str = "en"
+    
+@router.get("/multilingual-speakers")
+def list_multilingual_speakers():
+    return get_multilingual_speakers()
 
 @router.get("/speakers")
 def list_speakers():
-    """Returns all available TTS speakers — no auth needed."""
     return get_speakers()
+
+@router.get("/languages")
+def list_languages():
+    return get_all_languages()
 
 @router.post("/generate")
 def generate(
@@ -30,16 +38,13 @@ def generate(
 ):
     if not req.text.strip():
         raise HTTPException(status_code=400, detail="Text cannot be empty")
-    if len(req.text) > MAX_TEXT_LENGTH:
-        raise HTTPException(status_code=400, detail=f"Max {MAX_TEXT_LENGTH} characters allowed")
-
     try:
-        filename = generate_speech(
+        filename, warnings, translation = generate_speech(
             text=req.text,
             speaker=req.speaker,
-            speed=req.speed
+            speed=req.speed,
+            language=req.language
         )
-
         record = AudioGeneration(
             user_id=current_user.id,
             text=req.text,
@@ -51,8 +56,12 @@ def generate(
         return {
             "success": True,
             "filename": filename,
-            "download_url": f"/api/tts/audio/{filename}"
+            "download_url": f"/api/tts/audio/{filename}",
+            "warnings": warnings,
+            "translation": translation
         }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"TTS generation failed: {str(e)}")
 

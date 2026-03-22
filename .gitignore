@@ -1,21 +1,10 @@
-# Python
-backend/venv/
-backend/__pycache__/
-backend/app/__pycache__/
-backend/**/__pycache__/
-backend/*.pyc
-backend/.env
-
-# Audio files (too large for git)
-backend/audio_outputs/
-backend/voice_samples/
-backend/openvoice_checkpoints/
-
-# Next.js
-frontend/.next/
-frontend/node_modules/
-frontend/.env.local
-
-# OS
-.DS_Store
-Thumbs.db
+venv/
+__pycache__/
+*.pyc
+.env
+audio_outputs/
+voice_samples/
+my_voice_dataset/
+my_finetuned_model/
+*.wav
+*.mp3

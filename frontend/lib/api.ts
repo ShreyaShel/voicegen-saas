@@ -26,11 +26,17 @@ export const loginUser = (data: { email: string; password: string }) =>
 export const getMe = () => API.get("/api/auth/me");
 
 // TTS
+export const getLanguages = () => API.get("/api/tts/languages");
+
+export const getMultilingualSpeakers = () => API.get("/api/tts/multilingual-speakers");
+
+
 export const generateSpeech = (
   text: string,
-  speaker: string = "p267",
-  speed: number = 1.0
-) => API.post("/api/tts/generate", { text, speaker, speed });
+  speaker: string = "p225",
+  speed: number = 1.0,
+  language: string = "en"
+) => API.post("/api/tts/generate", { text, speaker, speed, language });
 
 export const getSpeakers = () => API.get("/api/tts/speakers");
 
