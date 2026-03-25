@@ -13,6 +13,20 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Redirect to login if 401 Unauthorized
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth
 export const registerUser = (data: {
   email: string;

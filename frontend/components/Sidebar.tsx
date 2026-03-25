@@ -1,9 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const tabs = [
+  { id: "avatar", label: "Avatar Video", icon: (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+  </svg>
+  )},
   { id: "tts", label: "Text to Speech", icon: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
@@ -35,6 +40,7 @@ export default function Sidebar({
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const initials = user?.full_name
     ? user.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
@@ -86,7 +92,15 @@ export default function Sidebar({
       {/* Nav */}
       <div style={{ padding: "12px 8px", flex: 1 }}>
         {tabs.map(tab => (
-          <div key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+          <div key={tab.id} onClick={() => {
+            if (tab.id === "avatar") {
+              router.push("/avatar");
+            } else if (pathname === "/dashboard") {
+              setActiveTab(tab.id);
+            } else {
+              router.push(`/dashboard?tab=${tab.id}`);
+            }
+          }} style={{
             display: "flex", alignItems: "center", gap: 10,
             padding: "10px 10px", borderRadius: 12, cursor: "pointer",
             marginBottom: 4, whiteSpace: "nowrap", overflow: "hidden",

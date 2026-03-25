@@ -4,6 +4,7 @@ from fastapi.security import HTTPBearer
 from app.database import engine, Base
 from app.models import user, voice, audio
 from app.routers import tts, auth, voices
+from app.routers import avatar
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,6 +27,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(tts.router, prefix="/api/tts", tags=["Text to Speech"])
 app.include_router(voices.router, prefix="/api/voices", tags=["Voice Cloning"])
+app.include_router(avatar.router, prefix="/api/avatar", tags=["Avatar Video"])
 
 @app.get("/")
 def root():

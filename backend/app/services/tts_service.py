@@ -134,7 +134,7 @@ def validate_and_clean_text(text: str) -> tuple[str, list[str]]:
     text = re.sub(r'(.)\1{4,}', r'\1\1', text)         # "hellooooo" -> "hello"
     text = re.sub(r'\b(\w+)( \1\b)+', r'\1', text)     # "the the" -> "the"
     text = re.sub(r'http\S+', '', text)                  # remove URLs
-    text = re.sub(r'[#@$%^&*~`|\\<>{}[\]]+', '', text)  # remove symbols
+    text = re.sub(r'[#@$%^&*~`|\\<>{}\[\]]+', '', text)       # remove symbols
     text = re.sub(r'\s+', ' ', text).strip()             # normalize spaces
 
     if not re.search(r'\w', text):

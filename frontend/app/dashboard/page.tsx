@@ -5,49 +5,29 @@ import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
+import DashboardLayout from "@/components/DashboardLayout";
 import TTSTab from "@/components/tabs/TTSTab";
 import CloneTab from "@/components/tabs/CloneTab";
 import HistoryTab from "@/components/tabs/HistoryTab";
 import AnalyticsTab from "@/components/tabs/AnalyticsTab";
+import { useSearchParams } from "next/navigation";
 
 export default function Dashboard() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const [loaderDone, setLoaderDone] = useState(false);
-  const [activeTab, setActiveTab] = useState("tts");
-  const [theme, setTheme] = useState("dark");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") || "tts";
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
-    if (!loading && !user) router.push("/login");
-  }, [user, loading]);
-
-  function handleTheme(t: string) {
-    setTheme(t);
-    document.body.className = t === "light" ? "light" : "";
-  }
-
-  if (loading) return null;
+    const tab = searchParams.get("tab");
+    if (tab) setActiveTab(tab);
+  }, [searchParams]);
 
   return (
-    <>
-      {!loaderDone && <Loader onDone={() => setLoaderDone(true)} />}
-      <div style={{
-        display: "flex", height: "100vh", overflow: "hidden",
-        opacity: loaderDone ? 1 : 0, transition: "opacity 0.8s"
-      }}>
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-          <Topbar activeTab={activeTab} theme={theme} setTheme={handleTheme} />
-          <div style={{
-            flex: 1, overflowY: "auto", padding: 24, background: "var(--bg)"
-          }}>
-            {activeTab === "tts" && <TTSTab />}
-            {activeTab === "clone" && <CloneTab />}
-            {activeTab === "history" && <HistoryTab />}
-            {activeTab === "analytics" && <AnalyticsTab />}
-          </div>
-        </div>
-      </div>
-    </>
+    <DashboardLayout activeTab={activeTab} setActiveTab={setActiveTab} showLoader={true}>
+      {activeTab === "tts" && <TTSTab />}
+      {activeTab === "clone" && <CloneTab />}
+      {activeTab === "history" && <HistoryTab />}
+      {activeTab === "analytics" && <AnalyticsTab />}
+    </DashboardLayout>
   );
 }

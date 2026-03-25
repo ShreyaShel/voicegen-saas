@@ -1,6 +1,7 @@
 "use client";
 
 const titles: Record<string, string> = {
+  avatar: "Avatar Generator",
   tts: "Text to Speech",
   clone: "Voice Cloning",
   history: "History",

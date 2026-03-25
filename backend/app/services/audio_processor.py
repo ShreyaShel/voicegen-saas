@@ -11,32 +11,32 @@ def preprocess_voice_sample(input_path: str) -> str:
     """
     print(f"Preprocessing voice sample: {input_path}")
 
-    # Load audio
-    y, sr = librosa.load(input_path, sr=22050, mono=True)
+    # Load audio - XTTS v2 native SR is 24000
+    y, sr = librosa.load(input_path, sr=24000, mono=True)
 
     # Step 1 — Trim leading/trailing silence
-    y, _ = librosa.effects.trim(y, top_db=20)
+    y, _ = librosa.effects.trim(y, top_db=25) # Slightly less aggressive trim
 
-    # Step 2 — Noise reduction
-    # Use the first 0.5 seconds as noise profile if audio is long enough
-    if len(y) > sr * 0.5:
-        noise_sample = y[:int(sr * 0.5)]
-        y = nr.reduce_noise(y=y, sr=sr, y_noise=noise_sample, prop_decrease=0.8)
+    # Step 2 — Noise reduction (Tuned for better fidelity)
+    # Use the first 0.3 seconds as noise profile
+    if len(y) > sr * 0.3:
+        noise_sample = y[:int(sr * 0.3)]
+        # Reduced prop_decrease to preserve voice sparkle
+        y = nr.reduce_noise(y=y, sr=sr, y_noise=noise_sample, prop_decrease=0.5)
 
     # Step 3 — Normalize volume
     max_val = np.max(np.abs(y))
     if max_val > 0:
-        y = y / max_val * 0.95
+        y = y / max_val * 0.98
 
-    # Step 4 — Ensure minimum length (pad if too short)
-    min_length = sr * 3  # minimum 3 seconds
+    # Step 4 — Ensure minimum length (3-6 seconds is sweet spot for XTTS)
+    min_length = sr * 6
     if len(y) < min_length:
-        # Repeat the audio to reach minimum length
         repeats = int(np.ceil(min_length / len(y)))
         y = np.tile(y, repeats)[:min_length]
 
-    # Step 5 — Trim to max 30 seconds (longer doesn't help YourTTS)
-    max_length = sr * 30
+    # Step 5 — Trim to max 60 seconds (XTTS v2 can benefit from longer samples)
+    max_length = sr * 60
     if len(y) > max_length:
         y = y[:max_length]
 

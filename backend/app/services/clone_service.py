@@ -3,6 +3,7 @@ import uuid
 import torch
 from app.config import VOICE_SAMPLE_DIR, AUDIO_OUTPUT_DIR
 from app.services.audio_processor import preprocess_voice_sample
+from app.services.f5_service import generate_f5_clone
 
 os.makedirs(VOICE_SAMPLE_DIR, exist_ok=True)
 os.makedirs(AUDIO_OUTPUT_DIR, exist_ok=True)
@@ -45,7 +46,9 @@ def get_supported_languages() -> dict:
 def clone_and_generate(
     text: str,
     speaker_wav_path: str,
-    language: str = "en"
+    language: str = "en",
+    use_f5: bool = True,
+    speed: float = 1.0
 ) -> str:
     if language not in SUPPORTED_LANGUAGES:
         language = "en"
@@ -58,6 +61,10 @@ def clone_and_generate(
 
     processed_path = os.path.abspath(processed_path)
 
+    if use_f5:
+        # F5-TTS is the high-quality "identical" cloning engine
+        return generate_f5_clone(text, processed_path, speed=speed)
+
     model = get_clone_model()
     filename = f"{uuid.uuid4()}.wav"
     out_path = os.path.join(AUDIO_OUTPUT_DIR, filename)
@@ -67,7 +74,10 @@ def clone_and_generate(
         speaker_wav=processed_path,
         language=language,
         file_path=out_path,
-        split_sentences=True
+        split_sentences=True,
+        # Improve cloning stability and quality
+        gpt_cond_len=6,
+        temperature=0.75, # Balanced between stability and similarity
     )
 
     return filename
