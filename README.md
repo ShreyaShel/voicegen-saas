@@ -236,7 +236,57 @@ The frontend will be available at `http://localhost:3000`
 
 ## Deployment
 
-### Docker (Recommended)
+### Deploy Backend to Railway
+
+1. **Create Railway Account**
+   - Go to [railway.app](https://railway.app) and sign up with GitHub
+
+2. **Deploy Backend**
+   ```bash
+   cd backend
+   railway login
+   railway init
+   ```
+
+3. **Add Environment Variables** in Railway dashboard:
+   - `DATABASE_URL` - PostgreSQL connection string (Railway can provision one)
+   - `SECRET_KEY` - Generate a secure random string
+   - `ALGORITHM` - `HS256`
+   - `ACCESS_TOKEN_EXPIRE_MINUTES` - `1440`
+   - `FRONTEND_URL` - Your Vercel frontend URL (e.g., `https://voicegen-saas.vercel.app`)
+
+4. **Set Start Command:**
+   ```
+   uvicorn app.main:app --host 0.0.0.0 --port 8080
+   ```
+
+5. **Note:** Railway's free tier has limited compute. For production with TTS/ML workloads, consider:
+   - Railway Pro
+   - Modal.com (better for GPU workloads)
+   - AWS/GCP with GPU instances
+
+### Deploy Frontend to Vercel
+
+1. **Create Vercel Account**
+   - Go to [vercel.com](https://vercel.com) and sign up with GitHub
+
+2. **Import Project**
+   - Click "Add New Project"
+   - Select `voicegen-saas` repository
+   - Set root directory to `frontend`
+
+3. **Configure Build Settings:**
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm install`
+
+4. **Add Environment Variable:**
+   - `NEXT_PUBLIC_API_URL` = Your Railway backend URL (e.g., `https://voicegen-backend.up.railway.app`)
+
+5. **Deploy**
+   - Click "Deploy"
+
+### Docker (Manual)
 
 **Backend:**
 ```bash
@@ -244,13 +294,6 @@ cd backend
 docker build -t voicegen-backend .
 docker run -p 8080:8080 --env-file .env voicegen-backend
 ```
-
-### Railway
-
-1. Connect your GitHub repository to Railway
-2. Add environment variables in Railway dashboard
-3. Deploy both frontend and backend
-4. Configure custom domains if needed
 
 ### Manual Deployment
 

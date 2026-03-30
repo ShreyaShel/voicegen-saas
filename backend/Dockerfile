@@ -20,6 +20,6 @@ COPY . .
 # Create directories
 RUN mkdir -p audio_outputs voice_samples
 
-EXPOSE 7860
+EXPOSE 8080
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
