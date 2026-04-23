@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VoiceGen — AI Voice Generation",
+  title: "EchoAI — AI Voice Generation",
   description: "Text to speech and voice cloning powered by AI",
 };
 

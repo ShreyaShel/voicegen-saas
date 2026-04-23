@@ -114,10 +114,3 @@ body {
 .wave-bar { animation: wb 0.8s ease-in-out infinite; }
 .upload-icon { animation: float 3s ease-in-out infinite; }
 .avatar { animation: avatarPulse 3s ease-in-out infinite; }
-.logo-icon::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2));
-  animation: shine 3s ease-in-out infinite;
-}

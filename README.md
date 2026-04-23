@@ -1,4 +1,4 @@
-# VoiceGen SaaS
+# EchoAI
 
 AI-powered voice generation platform with text-to-speech, voice cloning, and avatar video creation.
 

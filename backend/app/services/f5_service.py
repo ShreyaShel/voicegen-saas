@@ -23,7 +23,7 @@ def generate_f5_clone(
     text: str,
     ref_audio_path: str,
     ref_text: str = None,
-    speed: float = 1.0
+    speed: float = 0.8
 ) -> str:
     """
     Generate high-fidelity cloned speech using F5-TTS.

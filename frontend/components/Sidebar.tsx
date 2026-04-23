@@ -9,6 +9,11 @@ const tabs = [
     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
   </svg>
   )},
+  { id: "conversation", label: "Conversation", icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 15c0 1.1-.9 2-2 2H7l-4 4V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v10zM12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM8 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm8 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+    </svg>
+  )},
   { id: "tts", label: "Text to Speech", icon: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
       <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
@@ -63,20 +68,17 @@ export default function Sidebar({
         <div style={{ display: "flex", alignItems: "center", gap: 10, overflow: "hidden", whiteSpace: "nowrap" }}>
           <div style={{
             width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-            background: "linear-gradient(135deg,var(--p),var(--pink))",
             display: "flex", alignItems: "center", justifyContent: "center",
             position: "relative", overflow: "hidden"
           }} className="logo-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white" style={{ position: "relative", zIndex: 1 }}>
-              <path d="M12 3C8 3 5 6 5 10c0 2.5 1.2 4.7 3 6.1V19h8v-2.9c1.8-1.4 3-3.6 3-6.1 0-4-3-7-7-7z"/>
-            </svg>
+             <img src="/logo.png" alt="EchoAI" style={{ width: "90%", height: "90%", objectFit: "contain" }} />
           </div>
           {!collapsed && (
             <span style={{
               fontSize: 16, fontWeight: 700,
-              background: "linear-gradient(90deg,var(--p2),var(--pink))",
+              background: "linear-gradient(90deg,var(--p2),var(--cyan))",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
-            }}>VoiceGen</span>
+            }}>EchoAI</span>
           )}
         </div>
         <button onClick={() => setCollapsed(!collapsed)} style={{
@@ -93,8 +95,8 @@ export default function Sidebar({
       <div style={{ padding: "12px 8px", flex: 1 }}>
         {tabs.map(tab => (
           <div key={tab.id} onClick={() => {
-            if (tab.id === "avatar") {
-              router.push("/avatar");
+            if (tab.id === "avatar" || tab.id === "conversation") {
+              router.push(`/${tab.id}`);
             } else if (pathname === "/dashboard") {
               setActiveTab(tab.id);
             } else {

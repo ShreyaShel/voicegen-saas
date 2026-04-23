@@ -48,7 +48,7 @@ def clone_and_generate(
     speaker_wav_path: str,
     language: str = "en",
     use_f5: bool = True,
-    speed: float = 1.0
+    speed: float = 0.8
 ) -> str:
     if language not in SUPPORTED_LANGUAGES:
         language = "en"

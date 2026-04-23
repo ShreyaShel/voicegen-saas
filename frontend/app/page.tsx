@@ -39,20 +39,19 @@ export default function Home() {
       <div style={{ textAlign: "center", maxWidth: 600, position: "relative", zIndex: 1 }}>
         {/* Logo */}
         <div style={{
-          width: 72, height: 72, borderRadius: 20, margin: "0 auto 24px",
-          background: "linear-gradient(135deg,var(--p),var(--pink))",
-          display: "flex", alignItems: "center", justifyContent: "center"
+          width: 80, height: 80, borderRadius: 20, margin: "0 auto 24px",
+          background: "rgba(255,255,255,0.05)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          border: "1px solid var(--border)"
         }}>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
-            <path d="M12 3C8 3 5 6 5 10c0 2.5 1.2 4.7 3 6.1V19h8v-2.9c1.8-1.4 3-3.6 3-6.1 0-4-3-7-7-7z"/>
-          </svg>
+          <img src="/logo.png" alt="EchoAI" style={{ width: "80%", height: "80%", objectFit: "contain" }} />
         </div>
 
         <h1 style={{
-          fontSize: 52, fontWeight: 900, marginBottom: 16, lineHeight: 1.1,
+          fontSize: 64, fontWeight: 900, marginBottom: 16, lineHeight: 1.1,
           background: "linear-gradient(135deg,var(--p2),var(--pink),var(--cyan))",
           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
-        }}>VoiceGen AI</h1>
+        }}>EchoAI</h1>
 
         <p style={{ fontSize: 18, color: "var(--text2)", marginBottom: 12, lineHeight: 1.6 }}>
           Text-to-speech and voice cloning in 14 languages.
